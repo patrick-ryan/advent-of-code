@@ -4,6 +4,8 @@
 	(:gen-class)
 	(:require [clojure.contrib.command-line :as ccl]))
 
+(require 'digest)
+
 ; Day 3: Perfectly Spherical Houses in a Vacuum
 
 (defn read-file [f]
@@ -37,8 +39,24 @@
 					(let [[new-visited-list new-result] (visited new-coordinates visited-list result)]
 						(recur (inc dir-index) c1 c2 new-visited-list new-result)))))))
 
+
+; Day 4: The Ideal Stocking Stuffer
+
+(defn lowest-md5-num [keypart]
+	(loop [n 0]
+		(let [secretkey (str keypart n)]
+			(let [hex (digest/md5 secretkey)]
+				(if (.startsWith hex "000000")
+					n
+					(recur (inc n)))))))
+
+
+
+
+
 (defn -main [& args]
 	(ccl/with-command-line args
-		"Filename"
+		"Input"
     	[[filename "Filename" "D:/Dropbox/doc-sync/Programming/advent-of-code/day-3.txt"]]
-		(println "Houses: " (find-houses (get (read-file filename) 0)))))
+		;(println "Houses: " (find-houses (get (read-file filename) 0)))))
+		(println "Number: " (lowest-md5-num (read-line)))))
