@@ -13,17 +13,17 @@
     	(clojure.string/split-lines)))
 
 (defn new-coordinates [direction dir-index santa-coordinates robo-coordinates]
-	(let [coordinates (condp = (even? dir-index)
-		true santa-coordinates
-		false robo-coordinates)]
+	(let [coordinates (if (even? dir-index)
+		santa-coordinates
+		robo-coordinates)]
 		(let [new-coordinates (condp = (str direction)
 			"^" [(get coordinates 0) (+ (get coordinates 1) 1)]
 			"v" [(get coordinates 0) (- (get coordinates 1) 1)]
 			">" [(+ (get coordinates 0) 1) (get coordinates 1)]
 			"<" [(- (get coordinates 0) 1) (get coordinates 1)])]
-			(condp = (even? dir-index)
-				true [new-coordinates new-coordinates robo-coordinates]
-				false [new-coordinates santa-coordinates new-coordinates]))))
+			(if (even? dir-index)
+				[new-coordinates new-coordinates robo-coordinates]
+				[new-coordinates santa-coordinates new-coordinates]))))
 
 (defn visited [coordinates visited-list result]
 	(if (contains? visited-list coordinates)
